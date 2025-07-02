@@ -14,4 +14,5 @@ typedef struct s_shell {
 
 
 void execution(char *line , char **env);
+void piping(char *line , char **env);
 #endif

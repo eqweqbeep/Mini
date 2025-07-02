@@ -67,10 +67,10 @@ void execution(char *line , char **env) {
 		    {
 		    	if (execve(exec->path, exec->cmd_with_flags, NULL) == -1)
 			    	perror("error on execve func");
-			    exit(EXIT_FAILURE);
-	    	}
+	    	} 
             // increament index to step into another paths and do this instruction if the index is the same path as a cmd
             i++;
         }
-    }
+            exit(0);
+	}
 }
