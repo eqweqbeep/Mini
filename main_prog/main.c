@@ -29,7 +29,9 @@ int main(int counter , char **vectors , char **env) {
 		return -1;	
 	//execution(shell->line , env);	
 	piping(shell->line ,env);
-	usleep(900);
+	//sleep(900);
+	// here iam creating a function that check if the cmd is built in
+	//is_built_in(shell->line , env);
 	if(shell->line)
 		add_history(shell->line);
 	}
