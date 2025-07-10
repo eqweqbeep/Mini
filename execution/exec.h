@@ -15,6 +15,13 @@ typedef struct s_exex {
 	char	*path;
 }	t_exex;
 
+typedef struct x {
+	int fd[2];
+	int pid1 ;
+	int pid2;
+} t_piping;
+
+
 char	**extract_paths(char **env, t_exex *exec);
 char	*join_by_order(char const *s1, char b_slash, char const *s2);
 void	execution(char *line, char **env);

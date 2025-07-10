@@ -1,6 +1,26 @@
 
 #include "minishell.h"
 
+void handle_sigint(int sig)
+{
+    (void)sig;
+    write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
+}
+
+void setup_signals(void)
+{
+    struct sigaction sa;
+
+    sa.sa_handler = handle_sigint;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART;
+    sigaction(SIGINT, &sa, NULL);
+
+    signal(SIGQUIT, SIG_IGN); // Ignore Ctrl+\}
+} 
 
 // here create infinite loop that always keep prompt open 
 // then if line got some data execute them 
@@ -15,13 +35,17 @@
 // a lot of things 
 void	create_prompt(t_shell *shell)
 {	
+	setup_signals();
 	while (1)
 	{
-		shell->line = readline("CrounShell >$");
-			execution(shell->line, shell->env);
-		if(!shell->line)
-				continue;
-			add_history(shell->line);		
+		shell->line = readline("\033[95mCrounShell >$\033[0m");
+		  if (shell->line == NULL)
+        {
+            write(1, "exit\n", 5);
+            exit(0);
+        }
+		if (*shell->line)
+			piping(shell->line, shell->env);
 	}
 	write(1, "exit\n", 5);
 }

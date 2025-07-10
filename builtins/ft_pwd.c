@@ -1,7 +1,6 @@
 
 #include "builtins.h"
-// i need to handle pwd with options 
-// like bash: pwd: -p: invalid option
+
 int	ft_pwd(void)
 {
 	char	cwd[1024];
