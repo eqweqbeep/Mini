@@ -19,7 +19,7 @@ void setup_signals(void)
     sa.sa_flags = SA_RESTART;
     sigaction(SIGINT, &sa, NULL);
 
-    signal(SIGQUIT, SIG_IGN); // Ignore Ctrl+\}
+    signal(SIGQUIT, SIG_IGN); 
 } 
 
 // here create infinite loop that always keep prompt open 
@@ -45,7 +45,9 @@ void	create_prompt(t_shell *shell)
             exit(0);
         }
 		if (*shell->line)
-			piping(shell->line, shell->env);
+			// piping(shell->line, shell->env);
+			execution(shell->line , shell->env);
+		add_history(shell->line);
 	}
 	write(1, "exit\n", 5);
 }

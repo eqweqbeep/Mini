@@ -43,8 +43,44 @@ char *join_by_order(char const *s1, char b_slash, char const *s2) {
 // till we meet ill explain this execution now you dont need to know what happend 
 // ok now i did a struct that contain all these vars that i need on my execution
 // and i still add something else from you you can edit on my struct or just add a new struct then i will see about how to move it 
-void execution(char *line, char **env) {
+
+// void built_ins(t_exex *exec ,char **env) {
+
+// }
+// this func is for execute only relative path
+void execute_relative_path(t_exex *exec , char **env) {
+	if(exec->cmd_with_flags[0][0] == '/' || (exec->cmd_with_flags[0][0] == '.' && exec->cmd_with_flags[0][1] == '/')) {
+		if(access(exec->cmd_with_flags[0] , X_OK) == 0) 
+		{
+			if(execve(exec->cmd_with_flags[0] , exec->cmd_with_flags , env))
+			{	
+				write(2 , "error : execve\n" , 16);
+				exit(1);
+			}	
+		} else {
+			printf("%s : cmd not found cz of access \n" , exec->cmd_with_flags[0]);
+			exit(127);
+		}
+	}
+}
+// this func will be used for absolute path
+void execute_absolute_path(t_exex *exec , char **env) {
 	int i = 0;
+	exec->paths = extract_paths(env , exec);
+	while(exec->paths && exec->paths[i]) {
+		exec->path = join_by_order(exec->paths[i] , '/' , exec->cmd_with_flags[0]);
+		if(access(exec->path , X_OK | F_OK) == 0) 
+			if(execve(exec->path , exec->cmd_with_flags , env) == -1) {
+				write(2 , "error : exceve \n" , 17);
+			exit(1);
+		} 
+		i++;
+	}
+}
+
+
+void execution(char *line, char **env) {
+	// int i = 0;
 	t_exex *exec = malloc(sizeof(t_exex));
 	if (!exec) 
 		return;
@@ -59,34 +95,40 @@ void execution(char *line, char **env) {
 
 	exec->pid = fork();
 	if (exec->pid == 0) {
-		if (exec->cmd_with_flags[0][0] == '/' || 
-		   (exec->cmd_with_flags[0][0] == '.' && exec->cmd_with_flags[0][1] == '/')) {
-			if (access(exec->cmd_with_flags[0], F_OK | X_OK) == 0) {
-				execve(exec->cmd_with_flags[0], exec->cmd_with_flags, env);
-				perror("execve");
-				exit(EXIT_FAILURE);
-			} else {
-				printf("%s : command not found\n", exec->cmd_with_flags[0]);
-				exit(127);
-			}
-		}
-		exec->paths = extract_paths(env, exec);
-		while (exec->paths && exec->paths[i]) {
-			exec->path = join_by_order(exec->paths[i], '/', exec->cmd_with_flags[0]);
-			if (access(exec->path, F_OK | X_OK) == 0) {
-				if (execve(exec->path, exec->cmd_with_flags, env) == -1)
-					perror("execve");
-				exit(EXIT_FAILURE);
-			}
-			free(exec->path);
-			i++;
-		}
-		printf("%s : command not found\n",exec->cmd_with_flags[0]);
-		exit(127);
+		execute_relative_path(exec , env);
+		// if (exec->cmd_with_flags[0][0] == '/' || 
+		//    (exec->cmd_with_flags[0][0] == '.' && exec->cmd_with_flags[0][1] == '/')) {
+		// 	if (access(exec->cmd_with_flags[0], F_OK | X_OK) == 0) {
+		// 		execve(exec->cmd_with_flags[0], exec->cmd_with_flags, env);
+		// 		perror("execve");
+		// 		exit(EXIT_FAILURE);
+		// 	} else {
+		// 		printf("%s : command not found\n", exec->cmd_with_flags[0]);
+		// 		exit(127);
+		// 	}
+		// }
+		// exec->paths = extract_paths(env, exec);
+		// while (exec->paths && exec->paths[i]) {
+		// 	exec->path = join_by_order(exec->paths[i], '/', exec->cmd_with_flags[0]);
+		// 	if (access(exec->path, F_OK | X_OK) == 0) {
+		// 		if (execve(exec->path, exec->cmd_with_flags, env) == -1)
+		// 			perror("execve");
+		// 		exit(EXIT_FAILURE);
+		// 	}
+		// 	free(exec->path);
+		// 	i++;
+		// }
+		execute_absolute_path(exec , env);
+		 printf("%s : command not found\n",exec->cmd_with_flags[0]);
+		 exit(127);
 	} else {
 		waitpid(exec->pid, NULL, 0);
 	}
 }
+
+
+
+
 // typedef struct s_exex {
 // 	pid_t	pid;
 // 	char	**paths;
