@@ -78,6 +78,12 @@ void execute_absolute_path(t_exex *exec , char **env) {
 	}
 }
 
+// void check_if_is_builtins(t_exex *exec , char **env) {
+// 	if(is_builtin(exec->cmd_with_flags[0])) {
+// 		run_builtin(exec->cmd_with_flags , &env);
+// 		return;
+// 	}
+// }
 
 void execution(char *line, char **env) {
 	// int i = 0;
@@ -92,6 +98,7 @@ void execution(char *line, char **env) {
 		run_builtin(exec->cmd_with_flags, &env);
 		return;
 	}
+	// check_if_is_builtins(exec , env);
 
 	exec->pid = fork();
 	if (exec->pid == 0) {
