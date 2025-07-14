@@ -48,7 +48,7 @@ char *join_by_order(char const *s1, char b_slash, char const *s2) {
 
 // }
 // this func is for execute only relative path
-void execute_relative_path(t_exex *exec , char **env) {
+void execute_absolute_path(t_exex *exec , char **env) {
 	if(exec->cmd_with_flags[0][0] == '/' || (exec->cmd_with_flags[0][0] == '.' && exec->cmd_with_flags[0][1] == '/')) {
 		if(access(exec->cmd_with_flags[0] , X_OK) == 0) 
 		{
@@ -64,7 +64,7 @@ void execute_relative_path(t_exex *exec , char **env) {
 	}
 }
 // this func will be used for absolute path
-void execute_absolute_path(t_exex *exec , char **env) {
+void execute_relative_path(t_exex *exec , char **env) {
 	int i = 0;
 	exec->paths = extract_paths(env , exec);
 	while(exec->paths && exec->paths[i]) {
@@ -102,7 +102,7 @@ void execution(char *line, char **env) {
 
 	exec->pid = fork();
 	if (exec->pid == 0) {
-		execute_relative_path(exec , env);
+		execute_absolute_path(exec , env);
 		// if (exec->cmd_with_flags[0][0] == '/' || 
 		//    (exec->cmd_with_flags[0][0] == '.' && exec->cmd_with_flags[0][1] == '/')) {
 		// 	if (access(exec->cmd_with_flags[0], F_OK | X_OK) == 0) {
@@ -125,7 +125,7 @@ void execution(char *line, char **env) {
 		// 	free(exec->path);
 		// 	i++;
 		// }
-		execute_absolute_path(exec , env);
+		execute_relative_path(exec , env);
 		 printf("%s : command not found\n",exec->cmd_with_flags[0]);
 		 exit(127);
 	} else {
@@ -145,45 +145,45 @@ void execution(char *line, char **env) {
 
 
 // impleentation of pipe logic and waiting to define pipe 
-void piping(char *line , char **env) {
-	t_piping *content = malloc(sizeof(t_piping));
-	t_exex *exec = malloc(sizeof(t_exex));
-	if(!content || !exec)
-		perror("xxxxxxxx\n");
-	// 2 fd 0 for writeend and 1 for readend 
-	//  add double * char 
-	exec->cmd_with_flags = ft_split(line , '|');
-	if(!exec->cmd_with_flags[0]  || !exec->cmd_with_flags[1] || !exec->cmd_with_flags[2]) {
-		execution(line , env);
-		return;
-	}
-	if(pipe(content->fd) == -1)
-		write(2 , "error : pipe failed \n" , 21);
-	// for 1st pid1 ill fork to create a child that will execute the 1st cmd 
-	content->pid1 = fork();
-	if(content->pid1 == 0) {
-		dup2(content->fd[1] , 1);
-		// i must close the 2 gates of the pipe fd 0 and 1
-		close(content->fd[0]);
-		close(content->fd[1]);
-		execution(line , env);
-	} else {
-		// wait 1st child till end
-		waitpid(content->pid1 , NULL , 0);
-	}
-	// here is the 2nd child that will control my second cmd which mean box it into a child proc
-	content->pid2 = fork();
-	if(content->pid2 == 0) {
-		dup2(content->fd[0] , 0);
-		close(content->fd[0]);
-		close(content->fd[1]);
-		execution(line , env);
-	} else {
-		//wait 2nd child till end
-		waitpid(content->pid2 , NULL , 0);
-	}
-	// then close all gates of fd
-	close(content->fd[0]);
-	close(content->fd[1]);
+// void piping(char *line , char **env) {
+// 	t_piping *content = malloc(sizeof(t_piping));
+// 	t_exex *exec = malloc(sizeof(t_exex));
+// 	if(!content || !exec)
+// 		perror("xxxxxxxx\n");
+// 	// 2 fd 0 for writeend and 1 for readend 
+// 	//  add double * char 
+// 	exec->cmd_with_flags = ft_split(line , '|');
+// 	if(!exec->cmd_with_flags[0]  || !exec->cmd_with_flags[1] || !exec->cmd_with_flags[2]) {
+// 		execution(line , env);
+// 		return;
+// 	}
+// 	if(pipe(content->fd) == -1)
+// 		write(2 , "error : pipe failed \n" , 21);
+// 	// for 1st pid1 ill fork to create a child that will execute the 1st cmd 
+// 	content->pid1 = fork();
+// 	if(content->pid1 == 0) {
+// 		dup2(content->fd[1] , 1);
+// 		// i must close the 2 gates of the pipe fd 0 and 1
+// 		close(content->fd[0]);
+// 		close(content->fd[1]);
+// 		execution(line , env);
+// 	} else {
+// 		// wait 1st child till end
+// 		waitpid(content->pid1 , NULL , 0);
+// 	}
+// 	// here is the 2nd child that will control my second cmd which mean box it into a child proc
+// 	content->pid2 = fork();
+// 	if(content->pid2 == 0) {
+// 		dup2(content->fd[0] , 0);
+// 		close(content->fd[0]);
+// 		close(content->fd[1]);
+// 		execution(line , env);
+// 	} else {
+// 		//wait 2nd child till end
+// 		waitpid(content->pid2 , NULL , 0);
+// 	}
+// 	// then close all gates of fd
+// 	close(content->fd[0]);
+// 	close(content->fd[1]);
 
-}
+// }
