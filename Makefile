@@ -1,7 +1,7 @@
 
 NAME = minishell
 
-CC = cc
+CC = gcc
 CFLAGS = -g -Wall -Wextra -Werror
 
 SRCS = main_program/minishell.c \
