@@ -64,6 +64,38 @@ void execute_relative_path(t_exex *exec , char **env) {
 	}
 }
 
+int handle_redirections(t_exex *exec)
+{
+	int i = 0;
+	int fd;
+
+	while (exec->cmd_with_flags[i])
+	{
+		if (strcmp(exec->cmd_with_flags[i], ">") == 0)
+		{
+			fd = open(exec->cmd_with_flags[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd < 0)
+				return (perror("open >"), -1);
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+			exec->cmd_with_flags[i] = NULL; // truncate args
+			break;
+		} else if (strcmp(exec->cmd_with_flags[i], "<") == 0)
+		{
+			fd = open(exec->cmd_with_flags[i + 1], O_RDONLY);
+			if (fd < 0)
+				return (perror("open <"), -1);
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+			exec->cmd_with_flags[i] = NULL;
+			break;
+		}
+		i++;
+	}
+	return 0;
+}
+
+
 // void check_if_is_builtins(t_exex *exec , char **env) {
 // 	if(is_builtin(exec->cmd_with_flags[0])) {
 // 		run_builtin(exec->cmd_with_flags , &env);
@@ -88,6 +120,8 @@ void execution(char *line, char **env) {
 	}
 	exec->pid = fork();
 	if (exec->pid == 0) {
+		if (handle_redirections(exec) == -1)
+				exit(1);
 		execute_absolute_path(exec , env);
 		execute_relative_path(exec , env);
 		 printf("%s : command not found\n",exec->cmd_with_flags[0]);
