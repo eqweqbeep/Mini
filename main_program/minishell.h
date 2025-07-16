@@ -9,7 +9,6 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
 typedef struct s_M_S {
 	char	*line;
 	char	**env;

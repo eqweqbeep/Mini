@@ -6,6 +6,7 @@
 # include <unistd.h>
 # include <sys/wait.h>
 # include <stdio.h>
+#include <fcntl.h>
 // this just a few vars of what i need 
 // you can add ...
 typedef struct s_exex {
@@ -31,7 +32,8 @@ char	**ft_split(char const *s, char c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char *ft_strdup(const char *s);
 char *ft_substr(char const *s, unsigned int start, size_t len);
-
+void execute_absolute_path(t_exex *exec , char **env);
+void execute_relative_path(t_exex *exec , char **env);
 #endif
 
 

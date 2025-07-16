@@ -8,6 +8,7 @@ SRCS = main_program/minishell.c \
        execution/execution.c \
        execution/ft_split.c \
        execution/utils.c \
+       execution/exec_relative_absolute_path.c \
        builtins/builtins.c \
        builtins/ft_echo.c \
        builtins/ft_cd.c \
