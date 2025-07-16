@@ -11,6 +11,7 @@ SRCS = main_program/minishell.c \
        execution/path_extraction_utils.c \
        execution/exec_relative_absolute_path.c \
        execution/red_in_out.c \
+       execution/heredoc.c \
        builtins/builtins.c \
        builtins/ft_echo.c \
        builtins/ft_cd.c \

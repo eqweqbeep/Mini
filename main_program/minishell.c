@@ -35,6 +35,7 @@ void	create_prompt(t_shell *shell)
             write(1, "exit\n", 5);
             exit(0);
         }
+		heredoc(shell->line);
 		if (*shell->line)
 			execution(shell->line , shell->env);
 			//  piping(shell->line, shell->env);
