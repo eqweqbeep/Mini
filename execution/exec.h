@@ -34,6 +34,7 @@ char *ft_strdup(const char *s);
 char *ft_substr(char const *s, unsigned int start, size_t len);
 void execute_absolute_path(t_exex *exec , char **env);
 void execute_relative_path(t_exex *exec , char **env);
+int handle_redirections(t_exex *exec);
 #endif
 
 
