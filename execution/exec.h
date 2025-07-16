@@ -7,6 +7,7 @@
 # include <sys/wait.h>
 # include <stdio.h>
 #include <fcntl.h>
+#include <string.h>
 // this just a few vars of what i need 
 // you can add ...
 typedef struct s_exex {
