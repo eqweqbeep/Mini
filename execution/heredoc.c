@@ -31,7 +31,8 @@ static void heredoc_2(char *delimiter , char *r_line ,char *start) {
 void heredoc(char *line) {
     char *delimiter = NULL;
     char *r_line = NULL;
-    char *start = strstr(line, "<<");
+    char *start ;
+    start =  strstr(line, "<<");
     if (!start)
         return;
 

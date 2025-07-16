@@ -17,6 +17,8 @@ void execution(char *line, char **env) {
 	}
 	exec->pid = fork();
 	if (exec->pid == 0) {
+		signal(SIGINT , SIG_IGN);
+		heredoc(line);
 		if (handle_redirections(exec) == -1)
 				exit(1);
 		execute_absolute_path(exec , env);
