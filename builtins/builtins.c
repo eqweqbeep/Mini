@@ -6,7 +6,7 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 21:45:48 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/13 21:45:49 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/17 02:22:01 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	is_builtin(char *cmd)
 
 int	run_builtin(char **cmd, char ***env)
 {
+
 	if (!cmd || !cmd[0])
 		return (1);
 	if (!strcmp(cmd[0], "echo"))

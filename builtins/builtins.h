@@ -6,7 +6,7 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 21:46:05 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/13 21:46:06 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/17 02:22:24 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+
 
 int		is_builtin(char *cmd);
 int		run_builtin(char **cmd, char ***env);

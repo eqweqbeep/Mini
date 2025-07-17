@@ -16,6 +16,6 @@ typedef struct s_M_S {
 
 void	create_prompt(t_shell *shell);
 void	execution(char *line, char **env);
-void piping(char *line , char **env);
-void setup_signals(void);
+void 	piping(char *line , char **env);
+void 	setup_signals(void);
 #endif

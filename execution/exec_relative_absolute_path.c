@@ -6,11 +6,11 @@ void execute_absolute_path(t_exex *exec , char **env) {
 		{
 			if(execve(exec->cmd_with_flags[0] , exec->cmd_with_flags , env))
 			{	
-				write(2 , "error : execve\n" , 16);
+				write(1 , "error : execve\n" , 16);
 				exit(1);
 			}	
 		} else {
-			printf("%s : cmd not found cz of access \n" , exec->cmd_with_flags[0]);
+			printf("cmd not found cz of access : %s \n" , exec->cmd_with_flags[0]);
 			exit(127);
 		}
 	}

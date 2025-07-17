@@ -5,6 +5,13 @@
 // // but with quotes there is another cases
 // // 
 
+
+// $ cat << EOF
+// line 1
+// line 2
+// EOF
+
+
 static void heredoc_2(char *delimiter , char *r_line ,char *start) {
     char *new_l;    
     delimiter = ft_strdup(start);
@@ -24,7 +31,7 @@ static void heredoc_2(char *delimiter , char *r_line ,char *start) {
         if (strcmp(r_line, delimiter) == 0) {
             break;
         }  
-        printf("%s\n" , r_line);
+        // printf("%s\n" , r_line);
     }    
 }
 

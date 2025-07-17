@@ -15,17 +15,19 @@ void execution(char *line, char **env) {
 		run_builtin(exec->cmd_with_flags, &env);
 		return;
 	}
+	signal(SIGINT, SIG_IGN);
 	exec->pid = fork();
 	if (exec->pid == 0) {
-		signal(SIGINT , SIG_IGN);
+		signal(SIGINT , SIG_DFL);
 		heredoc(line);
 		if (handle_redirections(exec) == -1)
 				exit(1);
 		execute_absolute_path(exec , env);
 		execute_relative_path(exec , env);
-		 printf("%s : command not found\n",exec->cmd_with_flags[0]);
-		 exit(127);
+		printf("%s : command not found\n",exec->cmd_with_flags[0]);
+		exit(127);
 	} else {
 		waitpid(exec->pid, NULL, 0);
 	}
+	// exit(0);
 }
