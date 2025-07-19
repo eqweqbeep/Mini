@@ -21,11 +21,13 @@
 #include <string.h>
 // this just a few vars of what i need 
 // you can add ...
+
 typedef struct s_exex {
 	pid_t	pid;
 	char	**paths;
 	char	**cmd_with_flags;
 	char	*path;
+	char *ex_code;
 }	t_exex;
 
 typedef struct x {

@@ -27,6 +27,7 @@ void execution(char *line, char **env) {
 		run_builtin(exec->cmd_with_flags, &env);
 		return;
 	}
+	
 	signal(SIGINT, SIG_IGN);
 	exec->pid = fork();
 	if (exec->pid == 0) {

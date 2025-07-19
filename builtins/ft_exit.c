@@ -57,6 +57,6 @@ int	ft_exit(char **args)
 	}
 	
 	code = atoi(args[1]);
-	exit((unsigned char)code);
+	exit(code);
 }
 

@@ -8,6 +8,10 @@ void handle_sigint(int sig)
     rl_on_new_line();
     rl_replace_line("", 0);
     rl_redisplay();
+    // if(sig == SIGINT)
+        // exit(130);
+    // else if(sig == SIGQUIT)
+        // exit(131);
 }
 // here on signal part there is somethings dosent handled 
 // like Try ctrl-C after running a blocking command like cat without arguments or grep “something“.
@@ -20,6 +24,5 @@ void setup_signals(void)
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_RESTART;
     sigaction(SIGINT, &sa, NULL);
-
     signal(SIGQUIT, SIG_IGN); 
 } 
