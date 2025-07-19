@@ -13,13 +13,16 @@
 
 #include "minishell.h"
 
-
+// t_shell *get_memmo(void){
+// 	static t_shell *head;
+// 	return &head;
+// }
 
 void	create_prompt(t_shell *shell)
 {	
-		setup_signals();
 	while (1)
 	{
+		setup_signals();
 		shell->line = readline("\033[95mCrounShell >$\033[0m");
 		  if (shell->line == NULL)
         {
