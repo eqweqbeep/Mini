@@ -13,14 +13,26 @@
 
 #include "builtins.h"
 
-int	ft_echo(char **args)
-{
-	int	i = 1;
-	int	nl = 1;
 
-	if (args[1] && !strcmp(args[1], "-n"))
+static int is_valid_n_flag(const char *arg)
+{
+	if (arg[0] != '-')
+		return (0);
+	for (int i = 1; arg[i]; i++)
 	{
-		nl = 0;
+		if (arg[i] != 'n')
+			return (0);
+	}
+	return (1);
+}
+
+int ft_echo(char **args)
+{
+	int i = 1;
+	int newline = 1;
+	while (args[i] && is_valid_n_flag(args[i]))
+	{
+		newline = 0;
 		i++;
 	}
 	while (args[i])
@@ -30,7 +42,9 @@ int	ft_echo(char **args)
 			write(1, " ", 1);
 		i++;
 	}
-	if (nl)
+
+	if (newline)
 		write(1, "\n", 1);
+
 	return (0);
 }

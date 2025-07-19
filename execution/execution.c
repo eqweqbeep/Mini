@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jait-chd <jait-chd@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/06/01 17:21:12 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/19 03:08:05 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+//filename="file with spaces.txt"
+//cat < $filename   # This gives "ambiguous redirect"
 #include "../builtins/builtins.h"
 #include "exec.h"
 
 void execution(char *line, char **env) {
 	// int i = 0;
 	t_exex *exec = malloc(sizeof(t_exex));
-	if (!exec) 
+	if (!exec)
 		return;
 
 	exec->cmd_with_flags = ft_split(line, ' ');
