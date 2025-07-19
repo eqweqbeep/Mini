@@ -26,6 +26,8 @@ static int is_valid_n_flag(const char *arg)
 	return (1);
 }
 
+
+
 int ft_echo(char **args)
 {
 	int i = 1;

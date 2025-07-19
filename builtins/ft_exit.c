@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/13 21:46:20 by jait-chd          #+#    #+#             */
+/*   Created: 2025/06/11 05:46:20 by jait-chd          #+#    #+#             */
 /*   Updated: 2025/07/13 21:46:21 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -60,19 +60,3 @@ int	ft_exit(char **args)
 	exit((unsigned char)code);
 }
 
-// #include "builtins.h"
-
-// int	ft_exit(char **args)
-// {
-// 	int	code = 0;
-
-// 	if (args[1])
-// 	code = atoi(args[1]);
-// 	if((code >= 'a' && code <= 'z' )|| (code >= 'A' && code <= 'Z')) {
-// 		write(1, "exit\n", 5);
-// 		write(2,"numeric argument required\n" , 27);
-// 		exit(2);
-// 	}	
-// 	exit(code);
-// }
- 

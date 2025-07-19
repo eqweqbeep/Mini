@@ -25,7 +25,7 @@
 
 
 static void heredoc_2(char *delimiter , char *r_line ,char *start) {
-    char *new_l;    
+    char *new_l;
     delimiter = ft_strdup(start);
     if(!delimiter)
         return ;
@@ -35,7 +35,7 @@ static void heredoc_2(char *delimiter , char *r_line ,char *start) {
     new_l = strchr(delimiter , ' ');
     if(new_l)
         *new_l = '\0';
-     while (1) {
+    while (1) {
         r_line = readline("\033[95mherdoc >$\033[0m");
         if (!r_line)
             break;
@@ -59,29 +59,5 @@ void heredoc(char *line) {
 
     while (*start == ' ')
         start++;
-
-    // delimiter = ft_strdup(start);
-    // if (!delimiter)
-    //     return;
-
-    // char *nl = strchr(delimiter, '\n');
-    // if (nl) 
-    //     *nl = '\0';
-
-    // nl = strchr(delimiter, ' ');
-    // if (nl) 
-    //     *nl = '\0';
     heredoc_2(delimiter ,r_line , start);
-    // while (1) {
-    //     r_line = readline("\033[95mherdoc >$\033[0m");
-    //     if (!r_line)
-    //         break;
-
-    //     if (strcmp(r_line, delimiter) == 0) {
-    //         break;
-    //     }
-
-        // printf("%s\n", r_line); 
-    // }
-
 }
