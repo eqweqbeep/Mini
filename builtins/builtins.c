@@ -18,7 +18,7 @@ int	is_builtin(char *cmd)
 	if (!cmd)
 		return (0);
 	return (!strcmp(cmd, "echo") || !strcmp(cmd, "cd") || !strcmp(cmd, "pwd") ||
-			!strcmp(cmd, "env") || !strcmp(cmd, "exit"));
+			!strcmp(cmd, "env") || !strcmp(cmd, "exit") );
 }
 
 int	run_builtin(char **cmd, char ***env)

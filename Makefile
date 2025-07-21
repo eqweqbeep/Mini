@@ -1,10 +1,12 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g 
 
 SRCS = main_program/minishell.c \
        main_program/signals.c \
+       main_program/check_input.c \
+       main_program/get_tokens.c \
        execution/execution.c \
        execution/ft_split.c \
        execution/utils.c \

@@ -30,11 +30,11 @@ typedef struct s_exex {
 	char *ex_code;
 }	t_exex;
 
-typedef struct x {
-	int fd[2];
-	int pid1 ;
-	int pid2;
-} t_piping;
+// typedef struct x {
+// 	int fd[2];
+// 	int pid1 ;
+// 	int pid2;
+// } t_piping;
 
 
 char	**extract_paths(char **env, t_exex *exec);

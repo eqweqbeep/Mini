@@ -14,7 +14,7 @@ int handle_redirections(t_exex *exec)
 				return (perror("open >"), -1);
 			dup2(fd, 1);
 			close(fd);
-			exec->cmd_with_flags[i] = NULL;
+		//	exec->cmd_with_flags[i] = NULL;
 			break;
 		} else if (ft_strncmp(exec->cmd_with_flags[i], "<" , 1) == 0)
 		{
@@ -23,7 +23,7 @@ int handle_redirections(t_exex *exec)
 				return (perror("open <"), -1);
 			dup2(fd, 0);
 			close(fd);
-			exec->cmd_with_flags[i] = NULL;
+		//	exec->cmd_with_flags[i] = NULL;
 			break;
 		}
 		i++;
