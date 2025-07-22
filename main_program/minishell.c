@@ -109,7 +109,7 @@ void	create_prompt(t_shell *shell)
 				// printf("token: %s | flag: %d\n", arr[i].token, arr[i].flag);
 		}
 		if (*shell->line)
-			execution(shell->line , shell->env);
+			execution(arr , shell->env);
 			//  piping(shell->line, shell->env);
 		add_history(shell->line);
 	}
