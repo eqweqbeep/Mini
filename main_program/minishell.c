@@ -6,7 +6,7 @@
 /*   By: jait-chd <jait-chd@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/06/01 17:21:12 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/24 18:39:07 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	create_prompt(t_shell *shell)
 				// printf("token: %s | flag: %d\n", arr[i].token, arr[i].flag);
 		}
 		if (*shell->line)
-			execution(arr , shell->env);
+			execution(shell->line , shell->env);
 			//  piping(shell->line, shell->env);
 		add_history(shell->line);
 	}
