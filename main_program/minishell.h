@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: crouns <crouns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 00:23:04 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 04:26:55 by crouns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void 	setup_signals(void);
 
 char	**extract_paths(char **env, t_exex *exec);
 char	*join_by_order(char const *s1, char b_slash, char const *s2);
-void	execution(char *line, char **env);
+void	execution(t_arr *arr, char **env);
 
 size_t	ft_strlen(const char *s);
 char	**ft_split(char const *s, char c);

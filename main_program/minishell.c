@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: crouns <crouns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 01:34:13 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 04:26:34 by crouns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,31 +90,56 @@ static void	*input_analysis(char *line)
 	return ((t_arr *)assign_flags(arr));
 }
 
-void	create_prompt(t_shell *shell)
-{	
-	t_arr	*arr;
-	while (1)
-	{
-		// setup_signals();
-		shell->line = readline("\033[95mCrounShell >$\033[0m");
-		  if (shell->line == NULL)
+void create_prompt(t_shell *shell)
+{
+    t_arr *arr;
+    while (1)
+    {
+        shell->line = readline("\033[95mCrounShell >$\033[0m");
+        if (shell->line == NULL)
         {
             write(1, "exit\n", 5);
             exit(0);
         }
-		if (!check_input(shell->line))
-		{
-			arr = input_analysis(shell->line);
-			// for (int i = 0; arr[i].token; i++)
-				// printf("token: %s | flag: %d\n", arr[i].token, arr[i].flag);
-			execution(shell->line , shell->env);
-		}
-		// if (*shell->line)
-			//  piping(shell->line, shell->env);
-		add_history(shell->line);
-	}
-	write(1, "exit\n", 5);
+        if (!check_input(shell->line))
+        {
+            arr = input_analysis(shell->line);
+            if (arr)
+            {
+                execution(arr, shell->env); // Updated call
+                // free_arr(arr); // Free arr after use
+            }
+        }
+        add_history(shell->line);
+    }
+    write(1, "exit\n", 5);
 }
+
+// void	create_prompt(t_shell *shell)
+// {	
+// 	t_arr	*arr;
+// 	while (1)
+// 	{
+// 		// setup_signals();
+// 		shell->line = readline("\033[95mCrounShell >$\033[0m");
+// 		  if (shell->line == NULL)
+//         {
+//             write(1, "exit\n", 5);
+//             exit(0);
+//         }
+// 		if (!check_input(shell->line))
+// 		{
+// 			arr = input_analysis(shell->line);
+// 			// for (int i = 0; arr[i].token; i++)
+// 				// printf("token: %s | flag: %d\n", arr[i].token, arr[i].flag);
+// 			execution(shell->line , shell->env);
+// 		}
+// 		// if (*shell->line)
+// 			//  piping(shell->line, shell->env);
+// 		add_history(shell->line);
+// 	}
+// 	write(1, "exit\n", 5);
+// }
 
 int	main(int c, char **v, char **env)
 {
