@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jait-chd <jait-chd@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/19 03:08:05 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:22:30 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-//filename="file with spaces.txt"
+
 //cat < $filename   # This gives "ambiguous redirect"
 #include "../builtins/builtins.h"
-#include "exec.h"
+#include "minishell.h"
 
 void execution(char *line, char **env) {
 	// int i = 0;

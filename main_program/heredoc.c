@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   herdoc.c                                           :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jait-chd <jait-chd@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/06/01 17:21:12 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:13:49 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "minishell.h"
+
 // // the base of herdoc is [n] << [-]Word
 // //              here_document
 // // delimiter

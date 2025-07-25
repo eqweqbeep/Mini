@@ -7,13 +7,13 @@ SRCS = main_program/minishell.c \
        main_program/signals.c \
        main_program/check_input.c \
        main_program/get_tokens.c \
-       execution/execution.c \
-       execution/ft_split.c \
-       execution/utils.c \
-       execution/path_extraction_utils.c \
-       execution/exec_relative_absolute_path.c \
-       execution/red_in_out.c \
-       execution/heredoc.c \
+       main_program/execution.c \
+       main_program/ft_split.c \
+       main_program/utils.c \
+       main_program/path_extraction_utils.c \
+       main_program/exec_relative_absolute_path.c \
+       main_program/red_in_out.c \
+       main_program/heredoc.c \
        builtins/builtins.c \
        builtins/ft_echo.c \
        builtins/ft_cd.c \

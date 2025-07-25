@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jait-chd <jait-chd@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/24 18:39:07 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 01:34:13 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	create_prompt(t_shell *shell)
 	t_arr	*arr;
 	while (1)
 	{
-		setup_signals();
+		// setup_signals();
 		shell->line = readline("\033[95mCrounShell >$\033[0m");
 		  if (shell->line == NULL)
         {
@@ -107,9 +107,9 @@ void	create_prompt(t_shell *shell)
 			arr = input_analysis(shell->line);
 			// for (int i = 0; arr[i].token; i++)
 				// printf("token: %s | flag: %d\n", arr[i].token, arr[i].flag);
-		}
-		if (*shell->line)
 			execution(shell->line , shell->env);
+		}
+		// if (*shell->line)
 			//  piping(shell->line, shell->env);
 		add_history(shell->line);
 	}

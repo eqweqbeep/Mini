@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   exec_relative_absolute_path.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jait-chd <jait-chd@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/06/01 17:21:12 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:13:27 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "minishell.h"
 
 void execute_absolute_path(t_exex *exec , char **env) {
 	if(exec->cmd_with_flags[0][0] == '/' || (exec->cmd_with_flags[0][0] == '.' && exec->cmd_with_flags[0][1] == '/')) {
