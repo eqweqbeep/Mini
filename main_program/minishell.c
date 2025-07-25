@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crouns <crouns@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 04:26:34 by crouns           ###   ########.fr       */
+/*   Updated: 2025/07/25 20:46:31 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void create_prompt(t_shell *shell)
     t_arr *arr;
     while (1)
     {
+		setup_signals();
         shell->line = readline("\033[95mCrounShell >$\033[0m");
         if (shell->line == NULL)
         {
@@ -107,7 +108,6 @@ void create_prompt(t_shell *shell)
             if (arr)
             {
                 execution(arr, shell->env); // Updated call
-                // free_arr(arr); // Free arr after use
             }
         }
         add_history(shell->line);

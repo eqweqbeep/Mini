@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crouns <crouns@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 04:28:32 by crouns           ###   ########.fr       */
+/*   Updated: 2025/07/25 18:08:26 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void execution(t_arr *arr, char **env)
     if (is_builtin(exec->cmd_with_flags[0]))
     {
         run_builtin(exec->cmd_with_flags, &env);
-        free(exec->cmd_with_flags); // Free cmd_with_flags since not forked
-        free(exec);
         return;
     }
 
@@ -52,24 +50,24 @@ void execution(t_arr *arr, char **env)
     if (exec->pid == 0)
     {
         signal(SIGINT, SIG_DFL);
-        // Handle heredoc and redirections using flags
+     
         i = 0;
         while (arr[i].token)
         {
             if (arr[i].flag == TOKEN_HEREDOC && arr[i + 1].token)
             {
-                heredoc(arr[i + 1].token); // Updated call
+                heredoc(arr[i + 1].token); 
                 i++;
             }
-            else if (arr[i].flag == TOKEN_REDIRECT_OUT && arr[i + 1].token)
-            {
-                int fd = open(arr[i + 1].token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                if (fd < 0)
-                    exit(1);
-                dup2(fd, 1);
-                close(fd);
-                i++;
-            }
+            // else if (arr[i].flag == TOKEN_REDIRECT_OUT && arr[i + 1].token)
+            // {
+            //     int fd = open(arr[i + 1].token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            //     if (fd < 0)
+            //         exit(1);
+            //     dup2(fd, 1);
+            //     close(fd);
+            //     i++;
+            // }
             else if (arr[i].flag == TOKEN_APPEND && arr[i + 1].token)
             {
                 int fd = open(arr[i + 1].token, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -79,14 +77,15 @@ void execution(t_arr *arr, char **env)
                 close(fd);
                 i++;
             }
-            else if (arr[i].flag == TOKEN_REDIRECT_IN && arr[i + 1].token)
+            else if ((arr[i].flag == TOKEN_REDIRECT_IN && arr[i + 1].token) || (arr[i].flag == TOKEN_REDIRECT_OUT && arr[i + 1].token))
             {
-                int fd = open(arr[i + 1].token, O_RDONLY);
-                if (fd < 0)
-                    exit(1);
-                dup2(fd, 0);
-                close(fd);
-                i++;
+                handle_redirections(exec);
+            //     int fd = open(arr[i + 1].token, O_RDONLY);
+            //     if (fd < 0)
+            //         exit(1);
+            //     dup2(fd, 0);
+            //     close(fd);
+            //     i++;
             }
             i++;
         }
@@ -99,7 +98,7 @@ void execution(t_arr *arr, char **env)
     else
     {
         waitpid(exec->pid, NULL, 0);
-        free(exec->cmd_with_flags); // Free in parent
+        free(exec->cmd_with_flags); 
         free(exec);
     }
 }
