@@ -6,7 +6,7 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 17:50:51 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/26 09:03:23 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-// Macros
 # define PROMPT "~/path$ "
 # define WHITESPACES " \t\n\r\v\f"
 # define STOPS " \t\n\r\v\f><|"
@@ -52,18 +51,23 @@ typedef struct s_shell
 
 typedef struct s_exex
 {
-    pid_t   *pids;          // Array of PIDs for piped commands
-    char    **paths;        // PATH environment variable split
-    char    **cmd_with_flags; // Command and arguments
-    char    *path;          // Resolved command path
-    char    *ex_code;       // Exit code (optional)
-    t_arr   *tokens;        // Token array from parser
-    int     token_count;    // Number of tokens
-    int     pipe_count;     // Number of pipes
-    int     *pipe_fds;      // Pipe file descriptors
-    int     cmd_index;      // Current command index in pipeline
+    pid_t   *pids;       
+    char    **paths;       
+    char    **cmd_with_flags; 
+    char    *path;        
+    char    *ex_code;      
+    t_arr   *tokens;      
+    int     token_count;    
+    int     pipe_count;    
+    int     *pipe_fds;      
+    int     cmd_index;      
 }           t_exex;
 
+int     flags(char *s);
+void *input_analysis(char *line);
+t_arr   *re_assign_flags(t_arr **tokens);
+t_arr   *assign_flags(char **arr);
+void    free_tokens(t_arr *tokens);
 char    **split_and_stack(char *line);
 int     check_input(char *line);
 char    *ft_strchr(char *s, int c);

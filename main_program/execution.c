@@ -6,54 +6,61 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 18:08:26 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/26 09:27:02 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../builtins/builtins.h"
 #include "minishell.h"
 
-void free_exec(t_exex *exec)
-{
-    int i;
+// void free_exec(t_exex *exec)
+// {
+//     int i;
 
-    if (exec->cmd_with_flags)
-    {
-        for (i = 0; exec->cmd_with_flags[i]; i++)
-            free(exec->cmd_with_flags[i]);
-        free(exec->cmd_with_flags);
-    }
-    if (exec->paths)
-    {
-        for (i = 0; exec->paths[i]; i++)
-            free(exec->paths[i]);
-        free(exec->paths);
-    }
-    if (exec->path)
-        free(exec->path);
-    if (exec->pids)
-        free(exec->pids);
-    if (exec->pipe_fds)
-        free(exec->pipe_fds);
-    free(exec);
-}
+//     if (exec->cmd_with_flags)
+//     {
+//         for (i = 0; exec->cmd_with_flags[i]; i++)
+//             free(exec->cmd_with_flags[i]);
+//         free(exec->cmd_with_flags);
+//     }
+//     if (exec->paths)
+//     {
+//         for (i = 0; exec->paths[i]; i++)
+//             free(exec->paths[i]);
+//         free(exec->paths);
+//     }
+//     if (exec->path)
+//         free(exec->path);
+//     if (exec->pids)
+//         free(exec->pids);
+//     if (exec->pipe_fds)
+//         free(exec->pipe_fds);
+//     free(exec);
+// }
 
 static void collect_command(t_exex *exec, int start, int end)
 {
     int i, j, cmd_size;
 
     cmd_size = 0;
-    for (i = start; i < end && exec->tokens[i].token; i++)
+    i = start;
+    while( i < end && exec->tokens[i].token) {
         if (exec->tokens[i].flag == TOKEN_WORD)
             cmd_size++;
+        i++;
+    }
     exec->cmd_with_flags = malloc(sizeof(char *) * (cmd_size + 1));
     if (!exec->cmd_with_flags)
         exit(1);
     j = 0;
-    for (i = start; i < end && exec->tokens[i].token; i++)
-        if (exec->tokens[i].flag == TOKEN_WORD)
+    i = start;
+    while (i < end && exec->tokens[i].token) {
+        if(exec->tokens[i].flag == TOKEN_WORD) {
             exec->cmd_with_flags[j++] = ft_strdup(exec->tokens[i].token);
-    exec->cmd_with_flags[j] = NULL;
+        }
+            exec->cmd_with_flags[j] = NULL;
+        i++;
+}
 }
 
 static void execute_command(t_exex *exec, char **env, int start, int end)
@@ -63,12 +70,13 @@ static void execute_command(t_exex *exec, char **env, int start, int end)
 
     if (handle_redirections(exec, start, end) == -1)
         exit(1);
+    
     heredoc(exec, start, end);
 
     if (exec->cmd_with_flags[0] && is_builtin(exec->cmd_with_flags[0]))
     {
         run_builtin(exec->cmd_with_flags, &env);
-        free_exec(exec);
+        // free_exec(exec);
         exit(0);
     }
     else
@@ -76,7 +84,7 @@ static void execute_command(t_exex *exec, char **env, int start, int end)
         execute_absolute_path(exec, env);
         execute_relative_path(exec, env);
         printf("%s: command not found\n", exec->cmd_with_flags[0]);
-        free_exec(exec);
+        // free_exec(exec);
         exit(127);
     }
 }
@@ -90,22 +98,27 @@ void setup_pipes(t_exex *exec)
     exec->pipe_fds = malloc(sizeof(int) * 2 * exec->pipe_count);
     if (!exec->pipe_fds)
         exit(1);
-    for (i = 0; i < exec->pipe_count; i++)
+    i = 0;
+    while(i < exec->pipe_count) {
         if (pipe(exec->pipe_fds + i * 2) == -1)
         {
             perror("pipe");
             exit(1);
         }
+        i++;
+    }
 }
 
 void close_pipes(t_exex *exec)
 {
     int i;
-
+    i = 0;
     if (exec->pipe_count == 0)
         return;
-    for (i = 0; i < 2 * exec->pipe_count; i++)
+    while(i < 2 * exec->pipe_count) {
         close(exec->pipe_fds[i]);
+        i++;
+    }
 }
 
 void execution(t_arr *arr, char **env)
@@ -125,7 +138,6 @@ void execution(t_arr *arr, char **env)
     exec->path = NULL;
     exec->ex_code = NULL;
 
-    // Count pipes and commands
     exec->pipe_count = 0;
     for (i = 0; arr[i].token; i++)
         if (arr[i].flag == TOKEN_PIPE)
@@ -134,14 +146,11 @@ void execution(t_arr *arr, char **env)
     exec->pids = malloc(sizeof(pid_t) * cmd_count);
     if (!exec->pids)
     {
-        free_exec(exec);
         return;
     }
 
-    // Setup pipes
     setup_pipes(exec);
 
-    // Execute each command in the pipeline
     start = 0;
     for (i = 0, exec->cmd_index = 0; exec->cmd_index < cmd_count; exec->cmd_index++)
     {
