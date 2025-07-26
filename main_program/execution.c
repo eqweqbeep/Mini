@@ -10,126 +10,172 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//cat < $filename   # This gives "ambiguous redirect"
 #include "../builtins/builtins.h"
 #include "minishell.h"
 
-void execution(t_arr *arr, char **env)
+void free_exec(t_exex *exec)
 {
-    t_exex *exec = malloc(sizeof(t_exex));
-    if (!exec)
-        return;
+    int i;
 
-    // Collect command and arguments from TOKEN_WORD
-    int i = 0, j = 0, cmd_size = 0;
-    while (arr[i].token)
+    if (exec->cmd_with_flags)
     {
-        if (arr[i].flag == TOKEN_WORD)
+        for (i = 0; exec->cmd_with_flags[i]; i++)
+            free(exec->cmd_with_flags[i]);
+        free(exec->cmd_with_flags);
+    }
+    if (exec->paths)
+    {
+        for (i = 0; exec->paths[i]; i++)
+            free(exec->paths[i]);
+        free(exec->paths);
+    }
+    if (exec->path)
+        free(exec->path);
+    if (exec->pids)
+        free(exec->pids);
+    if (exec->pipe_fds)
+        free(exec->pipe_fds);
+    free(exec);
+}
+
+static void collect_command(t_exex *exec, int start, int end)
+{
+    int i, j, cmd_size;
+
+    cmd_size = 0;
+    for (i = start; i < end && exec->tokens[i].token; i++)
+        if (exec->tokens[i].flag == TOKEN_WORD)
             cmd_size++;
-        i++;
-    }
     exec->cmd_with_flags = malloc(sizeof(char *) * (cmd_size + 1));
-    i = 0;
-    while (arr[i].token)
-    {
-        if (arr[i].flag == TOKEN_WORD)
-            exec->cmd_with_flags[j++] = arr[i].token;
-        i++;
-    }
+    if (!exec->cmd_with_flags)
+        exit(1);
+    j = 0;
+    for (i = start; i < end && exec->tokens[i].token; i++)
+        if (exec->tokens[i].flag == TOKEN_WORD)
+            exec->cmd_with_flags[j++] = ft_strdup(exec->tokens[i].token);
     exec->cmd_with_flags[j] = NULL;
+}
 
-    // Check for builtins
-    if (is_builtin(exec->cmd_with_flags[0]))
+static void execute_command(t_exex *exec, char **env, int start, int end)
+{
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+
+    if (handle_redirections(exec, start, end) == -1)
+        exit(1);
+    heredoc(exec, start, end);
+
+    if (exec->cmd_with_flags[0] && is_builtin(exec->cmd_with_flags[0]))
     {
         run_builtin(exec->cmd_with_flags, &env);
-        return;
-    }
-
-    signal(SIGINT, SIG_IGN);
-    exec->pid = fork();
-    if (exec->pid == 0)
-    {
-        signal(SIGINT, SIG_DFL);
-     
-        i = 0;
-        while (arr[i].token)
-        {
-            if (arr[i].flag == TOKEN_HEREDOC && arr[i + 1].token)
-            {
-                heredoc(arr[i + 1].token); 
-                i++;
-            }
-            // else if (arr[i].flag == TOKEN_REDIRECT_OUT && arr[i + 1].token)
-            // {
-            //     int fd = open(arr[i + 1].token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            //     if (fd < 0)
-            //         exit(1);
-            //     dup2(fd, 1);
-            //     close(fd);
-            //     i++;
-            // }
-            else if (arr[i].flag == TOKEN_APPEND && arr[i + 1].token)
-            {
-                int fd = open(arr[i + 1].token, O_WRONLY | O_CREAT | O_APPEND, 0644);
-                if (fd < 0)
-                    exit(1);
-                dup2(fd, 1);
-                close(fd);
-                i++;
-            }
-            else if ((arr[i].flag == TOKEN_REDIRECT_IN && arr[i + 1].token) || (arr[i].flag == TOKEN_REDIRECT_OUT && arr[i + 1].token))
-            {
-                handle_redirections(exec);
-            //     int fd = open(arr[i + 1].token, O_RDONLY);
-            //     if (fd < 0)
-            //         exit(1);
-            //     dup2(fd, 0);
-            //     close(fd);
-            //     i++;
-            }
-            i++;
-        }
-
-        execute_absolute_path(exec, env);
-        execute_relative_path(exec, env);
-        printf("%s : command not found\n", exec->cmd_with_flags[0]);
-        exit(127);
+        free_exec(exec);
+        exit(0);
     }
     else
     {
-        waitpid(exec->pid, NULL, 0);
-        free(exec->cmd_with_flags); 
-        free(exec);
+        execute_absolute_path(exec, env);
+        execute_relative_path(exec, env);
+        printf("%s: command not found\n", exec->cmd_with_flags[0]);
+        free_exec(exec);
+        exit(127);
     }
 }
 
-// void execution(char *line, char **env) {
-// 	// int i = 0;
-// 	t_exex *exec = malloc(sizeof(t_exex));
-// 	if (!exec)
-// 		return;
+void setup_pipes(t_exex *exec)
+{
+    int i;
 
-// 	exec->cmd_with_flags = ft_split(line, ' ');
-// 	// dont care about builtins if you handle what you know you should handle 
-// 	// they will handled automatically
-// 	if (is_builtin(exec->cmd_with_flags[0])) {
-// 		run_builtin(exec->cmd_with_flags, &env);
-// 		return;
-// 	}
-	
-// 	signal(SIGINT, SIG_IGN);
-// 	exec->pid = fork();
-// 	if (exec->pid == 0) {
-// 		signal(SIGINT , SIG_DFL);
-// 		heredoc(line);
-// 		if (handle_redirections(exec) == -1)
-// 				exit(1);
-// 		execute_absolute_path(exec , env);
-// 		execute_relative_path(exec , env);
-// 		printf("%s : command not found\n",exec->cmd_with_flags[0]);
-// 		exit(127);
-// 	} else {
-// 		waitpid(exec->pid, NULL, 0);
-// 	}
-// 	// exit(0);
-// }
+    if (exec->pipe_count == 0)
+        return;
+    exec->pipe_fds = malloc(sizeof(int) * 2 * exec->pipe_count);
+    if (!exec->pipe_fds)
+        exit(1);
+    for (i = 0; i < exec->pipe_count; i++)
+        if (pipe(exec->pipe_fds + i * 2) == -1)
+        {
+            perror("pipe");
+            exit(1);
+        }
+}
+
+void close_pipes(t_exex *exec)
+{
+    int i;
+
+    if (exec->pipe_count == 0)
+        return;
+    for (i = 0; i < 2 * exec->pipe_count; i++)
+        close(exec->pipe_fds[i]);
+}
+
+void execution(t_arr *arr, char **env)
+{
+    t_exex *exec;
+    int i, start, cmd_count;
+
+    exec = malloc(sizeof(t_exex));
+    if (!exec)
+        return;
+    exec->tokens = arr;
+    exec->token_count = 0;
+    while (arr[exec->token_count].token)
+        exec->token_count++;
+    exec->cmd_with_flags = NULL;
+    exec->paths = NULL;
+    exec->path = NULL;
+    exec->ex_code = NULL;
+
+    // Count pipes and commands
+    exec->pipe_count = 0;
+    for (i = 0; arr[i].token; i++)
+        if (arr[i].flag == TOKEN_PIPE)
+            exec->pipe_count++;
+    cmd_count = exec->pipe_count + 1;
+    exec->pids = malloc(sizeof(pid_t) * cmd_count);
+    if (!exec->pids)
+    {
+        free_exec(exec);
+        return;
+    }
+
+    // Setup pipes
+    setup_pipes(exec);
+
+    // Execute each command in the pipeline
+    start = 0;
+    for (i = 0, exec->cmd_index = 0; exec->cmd_index < cmd_count; exec->cmd_index++)
+    {
+        int end = start;
+        while (end < exec->token_count && arr[end].token && arr[end].flag != TOKEN_PIPE)
+            end++;
+        
+        collect_command(exec, start, end);
+
+        signal(SIGINT, SIG_IGN);
+        exec->pids[exec->cmd_index] = fork();
+        if (exec->pids[exec->cmd_index] == 0)
+        {
+            if (exec->pipe_count > 0)
+            {
+                if (exec->cmd_index > 0)
+                    dup2(exec->pipe_fds[(exec->cmd_index - 1) * 2], 0);
+                if (exec->cmd_index < cmd_count - 1) 
+                    dup2(exec->pipe_fds[exec->cmd_index * 2 + 1], 1);
+                close_pipes(exec);
+            }
+            execute_command(exec, env, start, end);
+        }
+        start = end + 1;
+        if (exec->cmd_with_flags)
+        {
+            for (int j = 0; exec->cmd_with_flags[j]; j++)
+                free(exec->cmd_with_flags[j]);
+            free(exec->cmd_with_flags);
+            exec->cmd_with_flags = NULL;
+        }
+    }
+
+    close_pipes(exec);
+    for (i = 0; i < cmd_count; i++)
+        waitpid(exec->pids[i], NULL, 0);
+}

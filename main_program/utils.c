@@ -65,7 +65,6 @@ char *ft_strdup(const char *s) {
     return cpy;
 }
 
-// Writes a string to the given file descriptor
 void ft_putstr_fd(char *s, int fd)
 {
     if (!s)
@@ -77,7 +76,6 @@ void ft_putstr_fd(char *s, int fd)
     }
 }
 
-// Writes a string followed by a newline to the given file descriptor
 void ft_putendl_fd(char *s, int fd)
 {
     if (!s)

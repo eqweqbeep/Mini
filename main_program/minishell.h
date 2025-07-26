@@ -21,14 +21,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
-#include <fcntl.h>
+# include <fcntl.h>
 
 // Macros
 # define PROMPT "~/path$ "
 # define WHITESPACES " \t\n\r\v\f"
 # define STOPS " \t\n\r\v\f><|"
 # define CASES "|<>"
-# define FILE_OP "\003\004\005" 
+# define FILE_OP "\003\004\005"
 # define TOKEN_WORD 1
 # define TOKEN_PIPE 2
 # define TOKEN_REDIRECT_IN 3
@@ -38,60 +38,51 @@
 # define TOKEN_FILENAME 7
 # define TOKEN_DELIMITER 8
 
-typedef struct s_list
-{
-	char			*token;
-	int				flag;
-	struct s_list	*next;
-}					t_list;
-
 typedef struct s_arr
 {
-	char			*token;
-	int				flag;
-}					t_arr;
+    char            *token;
+    int             flag;
+}                   t_arr;
 
-typedef struct s_M_S {
-	char	*line;
-	char	**env;
-}	t_shell;
+typedef struct s_shell
+{
+    char    *line;
+    char    **env;
+}           t_shell;
 
-typedef struct s_exex {
-	pid_t	pid;
-	char	**paths;
-	char	**cmd_with_flags;
-	char	*path;
-	char *ex_code;
-}	t_exex;
+typedef struct s_exex
+{
+    pid_t   *pids;          // Array of PIDs for piped commands
+    char    **paths;        // PATH environment variable split
+    char    **cmd_with_flags; // Command and arguments
+    char    *path;          // Resolved command path
+    char    *ex_code;       // Exit code (optional)
+    t_arr   *tokens;        // Token array from parser
+    int     token_count;    // Number of tokens
+    int     pipe_count;     // Number of pipes
+    int     *pipe_fds;      // Pipe file descriptors
+    int     cmd_index;      // Current command index in pipeline
+}           t_exex;
 
-char	**split_and_stack(char *line);
-int		check_input(char *line);
-char	*ft_strchr(char *s, int c);
-void	create_prompt(t_shell *shell);
-// void 	piping(char *line , char **env);
-void 	setup_signals(void);
+char    **split_and_stack(char *line);
+int     check_input(char *line);
+char    *ft_strchr(char *s, int c);
+void    create_prompt(t_shell *shell);
+void    setup_signals(void);
+char    **extract_paths(char **env, t_exex *exec);
+char    *join_by_order(char const *s1, char b_slash, char const *s2);
+void    execution(t_arr *arr, char **env);
+size_t  ft_strlen(const char *s);
+char    **ft_split(char const *s, char c);
+int     ft_strncmp(const char *s1, const char *s2, size_t n);
+char    *ft_strdup(const char *s);
+char    *ft_substr(char const *s, unsigned int start, size_t len);
+void    execute_absolute_path(t_exex *exec, char **env);
+void    execute_relative_path(t_exex *exec, char **env);
+int     handle_redirections(t_exex *exec, int start, int end);
+void    heredoc(t_exex *exec, int start, int end);
+void    setup_pipes(t_exex *exec);
+void    close_pipes(t_exex *exec);
+void    free_exec(t_exex *exec);
 
-//
-
-
-// typedef struct x {
-// 	int fd[2];
-// 	int pid1 ;
-// 	int pid2;
-// } t_piping;
-
-
-char	**extract_paths(char **env, t_exex *exec);
-char	*join_by_order(char const *s1, char b_slash, char const *s2);
-void	execution(t_arr *arr, char **env);
-
-size_t	ft_strlen(const char *s);
-char	**ft_split(char const *s, char c);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char *ft_strdup(const char *s);
-char *ft_substr(char const *s, unsigned int start, size_t len);
-void execute_absolute_path(t_exex *exec , char **env);
-void execute_relative_path(t_exex *exec , char **env);
-int handle_redirections(t_exex *exec);
-void heredoc(char *line);
 #endif

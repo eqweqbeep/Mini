@@ -9,56 +9,58 @@
 /*   Updated: 2025/07/25 04:32:53 by crouns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minishell.h"
 
-// // the base of herdoc is [n] << [-]Word
-// //              here_document
-// // delimiter
-// // but with quotes there is another cases
-// // 
+static void heredoc_process(t_exex *exec, char *delimiter)
+{
+    char *r_line;
+    int fd[2];
 
-
-// $ cat << EOF
-// line 1
-// line 2
-// EOF
-
-
-static void heredoc_2(char *delimiter , char *r_line ,char *start) {
-    char *new_l;
-    delimiter = ft_strdup(start);
-    if(!delimiter)
-        return ;
-    new_l = strchr(delimiter , '\n');
-    if(new_l)
-        *new_l = '\0';
-    new_l = strchr(delimiter , ' ');
-    if(new_l)
-        *new_l = '\0';
-    while (1) {
-        r_line = readline("\033[95mherdoc >$\033[0m");
+    if (pipe(fd) == -1)
+    {
+        perror("pipe");
+        exit(1);
+    }
+    signal(SIGINT, SIG_DFL); 
+    while (1)
+    {
+        r_line = readline("\033[95mheredoc >$\033[0m");
         if (!r_line)
+        {
+            write(2, "warning: heredoc delimited by end-of-file\n", 42);
             break;
-
-        if (strcmp(r_line, delimiter) == 0) {
+        }
+        if (strcmp(r_line, delimiter) == 0)
+        {
+            free(r_line);
             break;
-        }  
-        // printf("%s\n" , r_line);
-    }    
+        }
+        write(fd[1], r_line, strlen(r_line));
+        write(fd[1], "\n", 1);
+        free(r_line);
+    }
+    close(fd[1]);
+    dup2(fd[0], 0);
+    close(fd[0]);
 }
 
-void heredoc(char *line) {
+void heredoc(t_exex *exec, int start, int end)
+{
+    int i = start;
     char *delimiter = NULL;
-    char *r_line = NULL;
-    char *start ;
-    start =  strstr(line, "<<");
-    if (!start)
-        return;
 
-    start += 2;
-
-    while (*start == ' ')
-        start++;
-    heredoc_2(delimiter ,r_line , start);
+    while (i < end && exec->tokens[i].token)
+    {
+        if (exec->tokens[i].flag == TOKEN_HEREDOC && i + 1 < end && exec->tokens[i + 1].flag == TOKEN_DELIMITER)
+        {
+            delimiter = ft_strdup(exec->tokens[i + 1].token);
+            if (!delimiter)
+                exit(1);
+            heredoc_process(exec, delimiter);
+            free(delimiter);
+            i += 2;
+        }
+        else
+            i++;
+    }
 }
