@@ -1,7 +1,7 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g 
 
 SRCS = main_program/minishell.c \
        main_program/signals.c \
@@ -14,7 +14,6 @@ SRCS = main_program/minishell.c \
        main_program/exec_relative_absolute_path.c \
        main_program/red_in_out.c \
        main_program/heredoc.c \
-       main_program/parse.c \
        builtins/builtins.c \
        builtins/ft_echo.c \
        builtins/ft_cd.c \

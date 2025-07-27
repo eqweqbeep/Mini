@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: crouns <crouns@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/26 09:28:32 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 04:32:53 by crouns           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minishell.h"
 
-static void heredoc_process(char *delimiter)
+static void heredoc_process(t_exex *exec, char *delimiter)
 {
     char *r_line;
     int fd[2];
@@ -57,7 +56,7 @@ void heredoc(t_exex *exec, int start, int end)
             delimiter = ft_strdup(exec->tokens[i + 1].token);
             if (!delimiter)
                 exit(1);
-            heredoc_process(delimiter);
+            heredoc_process(exec, delimiter);
             free(delimiter);
             i += 2;
         }

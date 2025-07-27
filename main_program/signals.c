@@ -6,7 +6,7 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 00:14:17 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/26 09:18:50 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/07/25 00:14:17 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void handle_sigquit(int sig)
 {
     (void)sig;
     write(2, "Quit (core dumped)\n", 19);
-    signal(SIGQUIT , SIG_IGN);
 }
 
 void sig_int(void)
