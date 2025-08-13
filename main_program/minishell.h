@@ -6,7 +6,7 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 21:09:15 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/08/13 05:01:25 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/08/13 06:42:36 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,6 @@
 # define ISVAL1 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_?"
 # define ISVAL2 "0123456789"
 
-typedef struct s_exex
-{         
-    char    **paths;        
-    char    **cmd_with_flags; 
-    char    *path;   
-}           t_exex;
 
 // Structs //
 /* for toknization */
@@ -79,6 +73,9 @@ typedef struct s_list
 {
 	struct s_list			*prev;
 	char					**cmds;
+    int             pid;
+    char            **paths;
+    char            *path;
 	t_rediraction			*rediraction;
 	struct s_list			*next;
 }							t_list;
@@ -128,7 +125,12 @@ char						*fill_str(int len, char c);
 int							get_var_len(char *s);
 int							get_len(char *s, int reset);
 t_split						*split_preserve_quotes(char *s, char *map);
-
+void    signals(void);
+void    execute_absolute_path(t_list *exec, char **env);
+void    execute_relative_path(t_list *exec, char **env);
+char    **extract_paths(char **env, t_list *exec);
+char    *join_by_order(char const *s1, char b_slash, char const *s2);
+char **ft_split(char const *s, char c);
 #endif
 
 // void cleanup_cmd_flags(t_exex *exec);
@@ -145,17 +147,12 @@ t_split						*split_preserve_quotes(char *s, char *map);
 // char    **split_and_stack(char *line);
 // char    *ft_strchr(char *s, int c);
 // void    create_prompt(t_shell *shell);
-// void    setup_signals(void);
-// char    **extract_paths(char **env, t_exex *exec);
-// char    *join_by_order(char const *s1, char b_slash, char const *s2);
 // void    execution(t_arr *arr, char **env);
 // size_t  ft_strlen(const char *s);
 // char    **ft_split(char const *s, char c);
 // int     ft_strncmp(const char *s1, const char *s2, size_t n);
 // char    *ft_strdup(const char *s);
 // char    *ft_substr(char const *s, unsigned int start, size_t len);
-// void    execute_absolute_path(t_exex *exec, char **env);
-// void    execute_relative_path(t_exex *exec, char **env);
 // int     handle_redirections(t_exex *exec, int start, int end);
 // void    heredoc(t_exex *exec, int start, int end);
 // void    setup_pipes(t_exex *exec);

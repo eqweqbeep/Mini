@@ -6,18 +6,18 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 00:14:23 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 00:14:24 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/08/13 06:44:50 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t ft_strlen(const char *s) {
-    size_t i = 0;
-    while (s[i])
-        i++;
-    return i;
-}
+// size_t ft_strlen(const char *s) {
+//     size_t i = 0;
+//     while (s[i])
+//         i++;
+//     return i;
+// }
 
 char *ft_substr(char const *s, unsigned int start, size_t len) {
     size_t i = 0;

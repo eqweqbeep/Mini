@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_getenv.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokoubar <mokoubar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:57:12 by mokoubar          #+#    #+#             */
-/*   Updated: 2025/08/11 21:58:28 by mokoubar         ###   ########.fr       */
+/*   Updated: 2025/08/13 06:43:19 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*get_env(t_env *env, char *s)

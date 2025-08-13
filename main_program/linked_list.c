@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokoubar <mokoubar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 22:42:02 by mokoubar          #+#    #+#             */
-/*   Updated: 2025/08/06 22:26:47 by mokoubar         ###   ########.fr       */
+/*   Updated: 2025/08/13 06:43:42 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
-#include <stdlib.h>
 
 t_env	*arr_list(char **env)
 {

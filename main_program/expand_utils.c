@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mokoubar <mokoubar@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 21:59:57 by mokoubar          #+#    #+#             */
-/*   Updated: 2025/08/11 22:02:12 by mokoubar         ###   ########.fr       */
+/*   Updated: 2025/08/13 06:43:00 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 int	get_len(char *s, int reset)

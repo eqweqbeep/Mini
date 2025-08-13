@@ -6,14 +6,14 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 23:26:37 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 00:14:07 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/08/13 06:38:14 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <string.h>
 
-
-char **extract_paths(char **env, t_exex *exec) {
+char **extract_paths(char **env, t_list *exec) {
 	int i = 0;
 	while (env[i]) {
 		if (!(ft_strncmp(env[i], "PATH=", 5))) {
@@ -32,7 +32,7 @@ char *join_by_order(char const *s1, char b_slash, char const *s2) {
 	if (!s1 || !s2)
 		return NULL;
 
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1 + ft_strlen(s2) + 1));
+	str = (char *)malloc(sizeof(char) * (strlen(s1) + 1 + strlen(s2) + 1));
 	if (!str)
 		return NULL;
 
