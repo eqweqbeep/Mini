@@ -6,12 +6,11 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 00:13:41 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/25 00:13:41 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/08/13 04:58:12 by jait-chd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static size_t   ft_counting(char const *s, char c) {
     size_t  i = 0, count = 0;
