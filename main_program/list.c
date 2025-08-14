@@ -130,6 +130,13 @@ void    free_command_list(t_list *list)
                 ft_free(list->rediraction);
                 list->rediraction = r_next;
         }
+                while (list->rediraction)
+                {
+                        r_next = list->rediraction->next;
+                        ft_free(list->rediraction->token);
+                        ft_free(list->rediraction);
+                        list->rediraction = r_next;
+                }
                 ft_free(list);
                 list = next;
         }
