@@ -112,6 +112,7 @@ void						free_tokens(t_tokens *tokens);
 t_tokens					*variable_expansion(t_tokens *tokens);
 t_list						*tokens_to_list(t_tokens *tokens);
 void						print_command_list(t_list *list);
+void						free_command_list(t_list *list);
 t_gc						**static_gc(void);
 void						ft_free_all(void);
 int							append_gc(void *ptr);

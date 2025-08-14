@@ -45,9 +45,7 @@ char	*ft_substr(char *s, int len)
 	i = 0;
 	if (len <= 0)
 		return (NULL);
-	sub = malloc(sizeof(char) * (len + 1));
-	if (!sub)
-		return (NULL);
+        sub = ft_malloc(sizeof(char) * (len + 1));
 	while (s[i] && i < len)
 	{
 		sub[i] = s[i];

@@ -116,6 +116,7 @@ void execution(t_list *cmds, char **env)
                 info->exit_status = 1;
         }
         i++;
+    }
     while (i-- > 0)
     {
         waitpid(pids[i], &status, 0);

@@ -15,11 +15,37 @@
 int check_what_to_execute(t_list *list, char **env)
 {
     t_info  *info;
+    int     saved_stdin;
+    int     saved_stdout;
 
     if (!list->next && is_builtin(list->cmds[0]))
     {
+        saved_stdin = dup(STDIN_FILENO);
+        saved_stdout = dup(STDOUT_FILENO);
+        if (saved_stdin == -1 || saved_stdout == -1)
+        {
+            if (saved_stdin != -1)
+                close(saved_stdin);
+            if (saved_stdout != -1)
+                close(saved_stdout);
+            static_info()->exit_status = 1;
+            return (1);
+        }
+        if (handle_redirections(list) == -1)
+        {
+            dup2(saved_stdin, STDIN_FILENO);
+            dup2(saved_stdout, STDOUT_FILENO);
+            close(saved_stdin);
+            close(saved_stdout);
+            static_info()->exit_status = 1;
+            return (1);
+        }
         info = static_info();
         info->exit_status = run_builtin(list->cmds, &env);
+        dup2(saved_stdin, STDIN_FILENO);
+        dup2(saved_stdout, STDOUT_FILENO);
+        close(saved_stdin);
+        close(saved_stdout);
         return (1);
     }
     return (0);
@@ -67,6 +93,7 @@ int	main(int ac, char **av, char **env)
                         execution(list, env);
                 }
                 print_command_list(list);
+                free_command_list(list);
         }
         return (0);
 }
