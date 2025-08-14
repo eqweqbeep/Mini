@@ -26,6 +26,8 @@ int handle_redirections(t_list *exec)
             fd = open(r->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
         else if (r->type == TOKEN_REDIRECT_IN)
             fd = open(r->token, O_RDONLY);
+        else if (r->type == TOKEN_HEREDOC)
+            fd = r->fd;
         else
         {
             r = r->next;
@@ -36,7 +38,7 @@ int handle_redirections(t_list *exec)
             perror(r->token);
             return (-1);
         }
-        if (r->type == TOKEN_REDIRECT_IN)
+        if (r->type == TOKEN_REDIRECT_IN || r->type == TOKEN_HEREDOC)
             dup2(fd, STDIN_FILENO);
         else
             dup2(fd, STDOUT_FILENO);
