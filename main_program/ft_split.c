@@ -30,11 +30,32 @@ static void ft_start_end(const char *s, size_t *i, size_t *j, char c) {
         (*j)++;
 }
 
-static char **ft_free(char **r, size_t l) {
+static char **free_split(char **r, size_t l)
+{
     while (l > 0)
+    {
         free(r[--l]);
+    }
     free(r);
-    return 0;
+    return (0);
+}
+
+static char *substr_from(const char *s, size_t start, size_t len)
+{
+    size_t  i;
+    char    *str;
+
+    i = 0;
+    str = malloc(len + 1);
+    if (!str)
+        return (NULL);
+    while (i < len && s[start + i])
+    {
+        str[i] = s[start + i];
+        i++;
+    }
+    str[i] = '\0';
+    return (str);
 }
 
 char **ft_split(char const *s, char c) {
@@ -49,9 +70,9 @@ char **ft_split(char const *s, char c) {
         return NULL;
     while (l < count) {
         ft_start_end(s, &i, &j, c);
-        r[l] = ft_substr(s, i, j);
+        r[l] = substr_from(s, i, j);
         if (!r[l])
-            return ft_free(r, l);
+            return free_split(r, l);
         i += j;
         l++;
     }
