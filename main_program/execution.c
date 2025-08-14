@@ -55,7 +55,6 @@ void execution(t_list *cmds, char **env)
     cmd_count = list_size(cmds);
     pids = malloc(sizeof(pid_t) * cmd_count);
     if (!pids)
-      
         return ;
     prev_fd = -1;
     i = 0;
