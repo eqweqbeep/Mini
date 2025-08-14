@@ -131,6 +131,12 @@ void    execute_relative_path(t_list *exec, char **env);
 char    **extract_paths(char **env, t_list *exec);
 char    *join_by_order(char const *s1, char b_slash, char const *s2);
 char **ft_split(char const *s, char c);
+char    *ft_strdup(const char *s);
+void    ft_putstr_fd(char *s, int fd);
+void    ft_putendl_fd(char *s, int fd);
+int     handle_redirections(t_list *exec);
+void    heredoc(t_list *exec);
+void    execute_pipeline(t_list *cmds, char **env);
 #endif
 
 // void cleanup_cmd_flags(t_exex *exec);
