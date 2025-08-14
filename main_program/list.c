@@ -58,6 +58,7 @@ void	add_rediraction(t_rediraction **red, t_tokens *tokens)
 	node->next = NULL;
         node->token = ft_strdup(tokens->next->string);
 	node->type = tokens->flag;
+        node->fd = -1;
 	node->ambiguous = 0;
 	if ((tokens->next->next && tokens->next->flag == tokens->next->next->flag)
 		|| !*tokens->next->string)
@@ -120,6 +121,15 @@ void    free_command_list(t_list *list)
                                 ft_free(list->cmds[i++]);
                         ft_free(list->cmds);
                 }
+        while (list->rediraction)
+        {
+                r_next = list->rediraction->next;
+                if (list->rediraction->fd >= 0)
+                        close(list->rediraction->fd);
+                ft_free(list->rediraction->token);
+                ft_free(list->rediraction);
+                list->rediraction = r_next;
+        }
                 while (list->rediraction)
                 {
                         r_next = list->rediraction->next;

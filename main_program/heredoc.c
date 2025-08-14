@@ -12,17 +12,17 @@
 
 #include "minishell.h"
 
-static void heredoc_process(char *delimiter)
+int heredoc(char *delimiter)
 {
     int     fd[2];
     char    *line;
 
     if (pipe(fd) == -1)
-        return ;
+        return (-1);
     while (1)
     {
         line = readline("heredoc>$");
-        if (!line || ft_strncmp(line, delimiter, ft_strlen(line) + 1) == 0)
+        if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
         {
             free(line);
             break ;
@@ -32,19 +32,23 @@ static void heredoc_process(char *delimiter)
         free(line);
     }
     close(fd[1]);
-    dup2(fd[0], STDIN_FILENO);
-    close(fd[0]);
+    return (fd[0]);
 }
 
-void    heredoc(t_list *exec)
+void    prepare_heredocs(t_list *exec)
 {
     t_rediraction   *r;
 
-    r = exec->rediraction;
-    while (r)
+    while (exec)
     {
-        if (r->type == TOKEN_HEREDOC)
-            heredoc_process(r->token);
-        r = r->next;
+        r = exec->rediraction;
+        while (r)
+        {
+            if (r->type == TOKEN_HEREDOC)
+                r->fd = heredoc(r->token);
+            r = r->next;
+        }
+        exec = exec->next;
     }
 }
+

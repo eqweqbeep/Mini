@@ -65,6 +65,7 @@ typedef struct s_rediraction
 	struct s_rediraction	*prev;
 	char					*token;
 	int						type;
+        int                                             fd;
 	int						ambiguous;
 	struct s_rediraction	*next;
 }							t_rediraction;
@@ -136,7 +137,8 @@ char    *ft_strdup(const char *s);
 void    ft_putstr_fd(char *s, int fd);
 void    ft_putendl_fd(char *s, int fd);
 int     handle_redirections(t_list *exec);
-void    heredoc(t_list *exec);
+int     heredoc(char *delimiter);
+void    prepare_heredocs(t_list *exec);
 void    execution(t_list *cmds, char **env);
 #endif
 

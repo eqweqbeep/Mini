@@ -88,6 +88,7 @@ int	main(int ac, char **av, char **env)
                         static_info()->exit_status = 258;
                         continue ;
                 }
+                prepare_heredocs(list);
                 if (!check_what_to_execute(list, env))
                 {
                         execution(list, env);
