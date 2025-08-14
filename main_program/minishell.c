@@ -26,25 +26,24 @@ int check_what_to_execute(t_list *list , char **env) {
             return 0;
         return 1;
 }
-void execution(t_list *exec , char **env) {
-signal(SIGINT, SIG_IGN);
-	exec->pid = fork();
-    (void)env;
-	if (exec->pid == 0) {
-		signal(SIGINT , SIG_IGN);
-		signal(SIGINT , SIG_DFL);
-		// heredoc(line);
-		// if (handle_redirections(exec) == -1)
-		// 		exit(1);
-		execute_absolute_path(exec , env);
-		execute_relative_path(exec , env);
-		 printf("%s : command not found\n",exec->cmds[0]);
-		 exit(127);
-		printf("%s : command not found\n",exec->cmds[0]);
-		exit(127);
-	} else {
-		waitpid(exec->pid, NULL, 0);
-	}
+void    execution(t_list *exec, char **env)
+{
+    signal(SIGINT, SIG_IGN);
+    exec->pid = fork();
+    if (exec->pid == 0)
+    {
+        signal(SIGINT, SIG_DFL);
+        heredoc(exec);
+        if (handle_redirections(exec) == -1)
+            exit(1);
+        execute_absolute_path(exec, env);
+        execute_relative_path(exec, env);
+        ft_putstr_fd(exec->cmds[0], 2);
+        ft_putendl_fd(": command not found", 2);
+        exit(127);
+    }
+    else
+        waitpid(exec->pid, NULL, 0);
 }
 
 void	history(char *line)
@@ -74,14 +73,16 @@ int	main(int ac, char **av, char **env)
     signals();
 	while (1)
 	{
-		line = readline(PROMPT);
-		history(line);
-		if (check_input(line))
-			continue ;
-		list = input_analysis(line);
-        check_what_to_execute(list , env);
-        execution(list , env);
-		print_command_list(list);
+                line = readline(PROMPT);
+                history(line);
+                if (check_input(line))
+                        continue ;
+                list = input_analysis(line);
+        if (!check_what_to_execute(list, env))
+        {
+                execution(list, env);
+        }
+                print_command_list(list);
 	}
 	return (0);
 }
