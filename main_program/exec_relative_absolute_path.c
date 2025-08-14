@@ -34,9 +34,26 @@ void execute_absolute_path(t_list *exec, char **env)
     }
 }
 
+static void try_exec(t_list *exec, char **env, int i)
+{
+    exec->path = join_by_order(exec->paths[i], '/', exec->cmds[0]);
+    if (exec->path && access(exec->path, X_OK | F_OK) == 0)
+    {
+        if (execve(exec->path, exec->cmds, env) == -1)
+        {
+            perror("execve");
+            free(exec->path);
+            exit(1);
+        }
+    }
+    free(exec->path);
+    exec->path = NULL;
+}
+
 void execute_relative_path(t_list *exec, char **env)
 {
-    int i = 0;
+    int i;
+
     if (!exec->cmds[0])
         exit(0);
     exec->paths = extract_paths(env, exec);
@@ -45,20 +62,10 @@ void execute_relative_path(t_list *exec, char **env)
         fprintf(stderr, "%s: command not found\n", exec->cmds[0]);
         exit(127);
     }
+    i = 0;
     while (exec->paths[i])
     {
-        exec->path = join_by_order(exec->paths[i], '/', exec->cmds[0]);
-        if (exec->path && access(exec->path, X_OK | F_OK) == 0)
-        {
-            if (execve(exec->path, exec->cmds, env) == -1)
-            {
-                perror("execve");
-                free(exec->path);
-                exit(1);
-            }
-        }
-        free(exec->path);
-        exec->path = NULL;
+        try_exec(exec, env, i);
         i++;
     }
 }
