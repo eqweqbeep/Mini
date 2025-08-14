@@ -12,38 +12,17 @@
 
 #include "minishell.h"
 
-
-int look_for_builtins(t_list *list , char **env) {
-    if(is_builtin(list->cmds[0])) {
-            run_builtin(list->cmds, &env);
-            return 1;
-        }
-        return 0;
-}
-
-int check_what_to_execute(t_list *list , char **env) {
-    if(!look_for_builtins(list , env))
-            return 0;
-        return 1;
-}
-void    execution(t_list *exec, char **env)
+int check_what_to_execute(t_list *list, char **env)
 {
-    signal(SIGINT, SIG_IGN);
-    exec->pid = fork();
-    if (exec->pid == 0)
+    t_info  *info;
+
+    if (!list->next && is_builtin(list->cmds[0]))
     {
-        signal(SIGINT, SIG_DFL);
-        heredoc(exec);
-        if (handle_redirections(exec) == -1)
-            exit(1);
-        execute_absolute_path(exec, env);
-        execute_relative_path(exec, env);
-        ft_putstr_fd(exec->cmds[0], 2);
-        ft_putendl_fd(": command not found", 2);
-        exit(127);
+        info = static_info();
+        info->exit_status = run_builtin(list->cmds, &env);
+        return (1);
     }
-    else
-        waitpid(exec->pid, NULL, 0);
+    return (0);
 }
 
 void	history(char *line)
