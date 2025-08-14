@@ -12,6 +12,34 @@
 
 #include "minishell.h"
 
+static int open_file(t_rediraction *r)
+{
+    if (r->type == TOKEN_REDIRECT_OUT)
+        return (open(r->token, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+    if (r->type == TOKEN_APPEND)
+        return (open(r->token, O_WRONLY | O_CREAT | O_APPEND, 0644));
+    if (r->type == TOKEN_REDIRECT_IN)
+        return (open(r->token, O_RDONLY));
+    if (r->type == TOKEN_HEREDOC)
+        return (r->fd);
+    return (-2);
+}
+
+static int apply_redirection(t_rediraction *r, int fd)
+{
+    if (fd < 0)
+    {
+        perror(r->token);
+        return (-1);
+    }
+    if (r->type == TOKEN_REDIRECT_IN || r->type == TOKEN_HEREDOC)
+        dup2(fd, STDIN_FILENO);
+    else
+        dup2(fd, STDOUT_FILENO);
+    close(fd);
+    return (0);
+}
+
 int handle_redirections(t_list *exec)
 {
     t_rediraction   *r;
@@ -20,29 +48,14 @@ int handle_redirections(t_list *exec)
     r = exec->rediraction;
     while (r)
     {
-        if (r->type == TOKEN_REDIRECT_OUT)
-            fd = open(r->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        else if (r->type == TOKEN_APPEND)
-            fd = open(r->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        else if (r->type == TOKEN_REDIRECT_IN)
-            fd = open(r->token, O_RDONLY);
-        else if (r->type == TOKEN_HEREDOC)
-            fd = r->fd;
-        else
+        fd = open_file(r);
+        if (fd == -2)
         {
             r = r->next;
-            continue;
+            continue ;
         }
-        if (fd < 0)
-        {
-            perror(r->token);
+        if (apply_redirection(r, fd) == -1)
             return (-1);
-        }
-        if (r->type == TOKEN_REDIRECT_IN || r->type == TOKEN_HEREDOC)
-            dup2(fd, STDIN_FILENO);
-        else
-            dup2(fd, STDOUT_FILENO);
-        close(fd);
         r = r->next;
     }
     return (0);
