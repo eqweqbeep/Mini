@@ -97,8 +97,8 @@ void	free_tokens(t_tokens *tokens)
 	while (tokens)
 	{
 		tmp = tokens->next;
-		free(tokens->string);
-		free(tokens);
+                ft_free(tokens->string);
+                ft_free(tokens);
 		tokens = tmp;
 	}
 }

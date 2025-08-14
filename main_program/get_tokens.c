@@ -53,9 +53,7 @@ static t_tokens	*stack_tokens(t_tokens *tokens, char *s)
 	t_tokens	*new;
 	t_tokens	*last;
 
-	new = malloc(sizeof(t_tokens));
-	if (!new)
-		return (free_tokens(tokens), exit(1), NULL);
+        new = ft_malloc(sizeof(t_tokens));
 	new->string = s;
 	new->flag = 0;
 	new->next = NULL;
