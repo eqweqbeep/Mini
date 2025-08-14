@@ -136,6 +136,7 @@ void    ft_putstr_fd(char *s, int fd);
 void    ft_putendl_fd(char *s, int fd);
 int     handle_redirections(t_list *exec);
 void    heredoc(t_list *exec);
+void    execution(t_list *cmds, char **env);
 #endif
 
 // void cleanup_cmd_flags(t_exex *exec);
