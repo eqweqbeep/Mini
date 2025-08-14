@@ -57,11 +57,16 @@ int	main(int ac, char **av, char **env)
                 if (check_input(line))
                         continue ;
                 list = input_analysis(line);
-        if (!check_what_to_execute(list, env))
-        {
-                execution(list, env);
-        }
+                if (!list)
+                {
+                        static_info()->exit_status = 258;
+                        continue ;
+                }
+                if (!check_what_to_execute(list, env))
+                {
+                        execution(list, env);
+                }
                 print_command_list(list);
-	}
-	return (0);
+        }
+        return (0);
 }

@@ -95,7 +95,7 @@ typedef struct s_env
 typedef struct s_info
 {
 	t_env					*env;
-	unsigned char			exit_status;
+	int exit_status;
 }							t_info;
 
 // Prototypes
