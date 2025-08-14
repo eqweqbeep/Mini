@@ -85,7 +85,7 @@ t_list	*tokens_to_list(t_tokens *tokens)
 	{
 		tmp = new_node(&list);
 		i = 0;
-		tmp->cmds = (char **)malloc(sizeof(char *) * count_words(tokens) + 1);
+                tmp->cmds = malloc(sizeof(char *) * (count_words(tokens) + 1));
 		while (tokens && tokens->flag != TOKEN_PIPE)
 		{
 			if (tokens->flag == TOKEN_WORD)

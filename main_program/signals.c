@@ -46,8 +46,14 @@ void sig_quit(void)
     signal(SIGQUIT , SIG_IGN);
 }
 
+void    sig_pipe(void)
+{
+    signal(SIGPIPE, SIG_IGN);
+}
+
 void signals(void)
 {
     sig_int();
     sig_quit();
+    sig_pipe();
 }
