@@ -67,6 +67,7 @@ int	main(int ac, char **av, char **env)
                         execution(list, env);
                 }
                 print_command_list(list);
+                free_command_list(list);
         }
         return (0);
 }
