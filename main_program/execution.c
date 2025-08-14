@@ -55,6 +55,7 @@ void execution(t_list *cmds, char **env)
     cmd_count = list_size(cmds);
     pids = malloc(sizeof(pid_t) * cmd_count);
     if (!pids)
+      
         return ;
     prev_fd = -1;
     i = 0;
@@ -77,6 +78,7 @@ void execution(t_list *cmds, char **env)
         {
             signal(SIGINT, SIG_DFL);
             signal(SIGQUIT, SIG_DFL);
+            signal(SIGPIPE, SIG_DFL);
             setup_io(prev_fd, pipe_fd, cmds->next != NULL);
             if (handle_redirections(cmds) == -1)
                 exit(1);
@@ -102,6 +104,19 @@ void execution(t_list *cmds, char **env)
     }
     if (prev_fd != -1)
         close(prev_fd);
+    status = 0;
+    i = 0;
+    while (i < cmd_count)
+    {
+        waitpid(pids[i], &status, 0);
+        if (i == cmd_count - 1)
+        {
+            if (WIFEXITED(status))
+                info->exit_status = WEXITSTATUS(status);
+            else
+                info->exit_status = 1;
+        }
+        i++;
     while (i-- > 0)
     {
         waitpid(pids[i], &status, 0);
