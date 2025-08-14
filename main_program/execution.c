@@ -55,6 +55,7 @@ void execution(t_list *cmds, char **env)
     cmd_count = list_size(cmds);
     pids = malloc(sizeof(pid_t) * cmd_count);
     if (!pids)
+      
         return ;
     prev_fd = -1;
     i = 0;
@@ -116,6 +117,11 @@ void execution(t_list *cmds, char **env)
                 info->exit_status = 1;
         }
         i++;
+    while (i-- > 0)
+    {
+        waitpid(pids[i], &status, 0);
+        if (i == 0)
+            info->exit_status = WIFEXITED(status) ? WEXITSTATUS(status) : 1;
     }
     free(pids);
 }
