@@ -10,24 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "builtins.h"
+#include <errno.h>
 
-int	ft_cd(char **args)
+int     ft_cd(char **args)
 {
-	if (!args[1])
-	{
-		write(2, "[cd] : is only a shortcut for cd /home so\n", 42);
-		 return (1);
-		// the exit status should be 0
-		 exit(0);
-	}
-	if (chdir(args[1]) != 0)
-	{
-		write(2,"No such file or directory\n" , 27);
-		return (1);
-		exit(0);
-	}
-	return (0);
+        if (args[1] && args[2])
+        {
+                write(2, "minishell: cd: too many arguments\n", 34);
+                return (1);
+        }
+        if (!args[1])
+        {
+                write(2, "minishell: cd: HOME not set\n", 27);
+                return (1);
+        }
+        if (chdir(args[1]) != 0)
+        {
+                write(2, "minishell: cd: ", 16);
+                write(2, args[1], strlen(args[1]));
+                write(2, ": ", 2);
+                write(2, strerror(errno), strlen(strerror(errno)));
+                write(2, "\n", 1);
+                return (1);
+        }
+        return (0);
 }
-// case 01 chmod folder to 000 and try to enter to it 
