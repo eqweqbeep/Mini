@@ -10,18 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "builtins.h"
 
-int	ft_env(char **env)
+int     ft_env(char **args, char **env)
 {
-	int	i = 0;
+        int     i;
 
-	while (env[i])
-	{
-		write(1, env[i], strlen(env[i]));
-		write(1, "\n", 1);
-		i++;
-	}
-	return (0);
+        if (args[1])
+        {
+                write(2, "minishell: env: too many arguments\n", 36);
+                return (1);
+        }
+        i = 0;
+        while (env[i])
+        {
+                write(1, env[i], strlen(env[i]));
+                write(1, "\n", 1);
+                i++;
+        }
+        return (0);
 }
