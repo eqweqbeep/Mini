@@ -6,28 +6,35 @@
 /*   By: jait-chd <jait-chd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 21:46:08 by jait-chd          #+#    #+#             */
-/*   Updated: 2025/07/13 21:54:53 by jait-chd         ###   ########.fr       */
+/*   Updated: 2025/08/13 00:00:00 by ChatGPT         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "builtins.h"
+extern char **environ;
 
-int	ft_cd(char **args)
+int ft_cd(char **a, char ***e)
 {
-	if (!args[1])
-	{
-		write(2, "[cd] : is only a shortcut for cd /home so\n", 42);
-		 return (1);
-		// the exit status should be 0
-		 exit(0);
-	}
-	if (chdir(args[1]) != 0)
-	{
-		write(2,"No such file or directory\n" , 27);
-		return (1);
-		exit(0);
-	}
-	return (0);
+        char cwd[1024]; char *p = a[1]; char *old = getenv("PWD");
+
+        if (a[1] && a[2])
+                return (write(2, "minishell: cd: too many arguments\n", 34), 1);
+        if (!p || !strcmp(p, "~"))
+                p = getenv("HOME");
+        else if (!strcmp(p, "-"))
+        {
+                if (!(p = getenv("OLDPWD")))
+                        return (write(2, "minishell: cd: OLDPWD not set\n", 30), 1);
+                write(1, p, strlen(p)); write(1, "\n", 1);
+        }
+        if (!p)
+                return (write(2, "minishell: cd: HOME not set\n", 28), 1);
+        if (chdir(p))
+        { write(2, "minishell: cd: ", 15); perror(p); return (1); }
+        if (!getcwd(cwd, sizeof(cwd)))
+                return (perror("cd"), 1);
+        if (old) setenv("OLDPWD", old, 1);
+        setenv("PWD", cwd, 1);
+        *e = environ; static_info()->env = arr_list(*e);
+        return (0);
 }
-// case 01 chmod folder to 000 and try to enter to it 
