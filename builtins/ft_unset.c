@@ -60,6 +60,7 @@ int ft_unset(char **a, char ***e)
                         write(2, "': not a valid identifier\n", 26), st = 1);
                 else
                         rm_var(a[i]);
+                        unsetenv(a[i]);
                 i++;
         }
         *e = environ;

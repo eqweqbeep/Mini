@@ -28,6 +28,12 @@ int ft_pwd(char **a)
                         return (write(2, "minishell: pwd: OLDPWD not set\n", 31), 1);
                 return (write(1, o, strlen(o)), write(1, "\n", 1), 0);
         }
+int ft_pwd(char **args)
+{
+        char cwd[1024];
+
+        if (args[1] && args[1][0] == '-' && args[1][1])
+                return (write(2, "minishell: pwd: invalid option\n", 31), 1);
         if (!getcwd(cwd, sizeof(cwd)))
                 return (perror("pwd"), 1);
         write(1, cwd, strlen(cwd));
