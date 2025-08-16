@@ -22,7 +22,7 @@
 int is_builtin(char *cmd);
 int run_builtin(char **cmd, char ***env);
 int ft_echo(char **args);
-int ft_cd(char **args);
+int ft_cd(char **args, char ***env);
 int ft_pwd(char **args);
 int ft_exit(char **args);
 int ft_env(char **args, char **env);

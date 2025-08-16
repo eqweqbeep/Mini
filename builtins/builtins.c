@@ -29,7 +29,8 @@ int run_builtin(char **cmd, char ***env)
         if (!strcmp(cmd[0], "echo"))
                 return (ft_echo(cmd));
         if (!strcmp(cmd[0], "cd"))
-                return (ft_cd(cmd));
+                return (ft_cd(cmd, env));
+                //return (ft_cd(cmd));
         if (!strcmp(cmd[0], "pwd"))
                 return (ft_pwd(cmd));
         if (!strcmp(cmd[0], "env"))

@@ -12,6 +12,22 @@
 
 #include "builtins.h"
 
+int ft_pwd(char **a)
+{
+        char cwd[1024];
+
+        if (a[1] && a[2])
+                return (write(2, "minishell: pwd: too many arguments\n", 35), 1);
+        if (a[1] && a[1][0] == '-' && a[1][1])
+                return (write(2, "minishell: pwd: invalid option\n", 31), 1);
+        if (a[1] && !strcmp(a[1], "-"))
+        {
+                char *o = getenv("OLDPWD");
+
+                if (!o)
+                        return (write(2, "minishell: pwd: OLDPWD not set\n", 31), 1);
+                return (write(1, o, strlen(o)), write(1, "\n", 1), 0);
+        }
 int ft_pwd(char **args)
 {
         char cwd[1024];

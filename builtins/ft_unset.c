@@ -31,6 +31,23 @@ static int valid(char *s)
         return (1);
 }
 
+static void rm_var(char *n)
+{
+        int i = 0, j, len = strlen(n);
+
+        while (environ[i])
+        {
+                if (!strncmp(environ[i], n, len) && environ[i][len] == '=')
+                {
+                        j = i;
+                        while (environ[j])
+                                environ[j] = environ[j + 1], j++;
+                        break ;
+                }
+                i++;
+        }
+}
+
 int ft_unset(char **a, char ***e)
 {
         int i = 1, st = 0;
@@ -42,6 +59,7 @@ int ft_unset(char **a, char ***e)
                         write(2, a[i], strlen(a[i])),
                         write(2, "': not a valid identifier\n", 26), st = 1);
                 else
+                        rm_var(a[i]);
                         unsetenv(a[i]);
                 i++;
         }
