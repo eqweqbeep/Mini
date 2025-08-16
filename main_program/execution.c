@@ -129,15 +129,12 @@ static void finalize_execution(int prev_fd, pid_t *pids, int cmd_count)
     free(pids);
 }
 
-void execution(t_list *cmds, char **env)
+static void run_commands(t_list *cmds, char **env,
+        pid_t *pids, int prev_fd)
 {
     int     pipe_fd[2];
-    int     prev_fd;
-    pid_t   *pids;
-    int     cmd_count;
     int     i;
-    if ((cmd_count = init_pids(cmds, &pids, &prev_fd)) < 0)
-        return ;
+
     i = 0;
     while (cmds)
     {
@@ -153,6 +150,18 @@ void execution(t_list *cmds, char **env)
         i++;
     }
     finalize_execution(prev_fd, pids, i);
+}
+
+void    execution(t_list *cmds, char **env)
+{
+    pid_t   *pids;
+    int     prev_fd;
+    int     cmd_count;
+
+    cmd_count = init_pids(cmds, &pids, &prev_fd);
+    if (cmd_count < 0)
+        return ;
+    run_commands(cmds, env, pids, prev_fd);
 }
 
 /* ************************************************************************** */
